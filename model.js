@@ -4,9 +4,13 @@ let formattedTime;
 let scrambleText = "";
 let pickedWord = "";
 let guess = "";
-let answerStatus = "";
+let origWord = "";
+let spaces = "";
+let num;
+let spaced = "";
+let unspaced;
+let gameStarted = false;
+let words = [];
 
 const app = document.getElementById("app");
 const input = document.getElementById("input");
-
-const words = ["empire", "table", "circular", "possible", "ballroom"];

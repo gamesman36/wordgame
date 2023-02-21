@@ -25,7 +25,7 @@ function pickWord() {
     return words[num];
 }
 
-// Fischer-Yates scrambler
+// Fisher-Yates scrambler
 function scrambleString(str) {
     let arr = str.split('');
     for (let i = arr.length - 1; i > 0; i--) {
@@ -37,6 +37,8 @@ function scrambleString(str) {
 
 function scrambler() {
     scrambleText = scrambleString(pickedWord);
+
+    // Handling of whitespace
     unspaced = pickedWord.replace(/\s/g, "");
     spaced = scrambleText.replace(/\s/g, "[space]");
 
@@ -46,7 +48,9 @@ function scrambler() {
 
 function checkGuess() {
     if(!gameStarted) return;
-    if (guess === unspaced) {
+
+    // Case-insensitive handling
+    if (guess.toLowerCase().replace(/\s/g, "") === unspaced) {
         alert("Correct!");
         clearInterval(timer);
         location.reload();

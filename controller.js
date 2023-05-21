@@ -1,16 +1,23 @@
 // API call to find a synonym corresponding to user input
 async function findSynonym() {
-    if(gameStarted) return;
+    if (gameStarted) return;
     url = `https://api.datamuse.com/words?rel_syn=${origWord}`;
     result = await axios.get(url);
     data = result.data;
-    if (data.length == 0) {
+    if (data.length === 0) {
         alert("Nothing found.");
         return;
     }
 
-    // List all possible synonyms
-    for (x of data) words.push(x.word);
+    // List all possible synonyms without spaces
+    words = data
+        .filter((x) => !x.word.includes(" "))
+        .map((x) => x.word);
+
+    if (words.length === 0) {
+        alert("No suitable synonyms found.");
+        return;
+    }
 
     pickedWord = pickWord();
     scrambler();
@@ -38,10 +45,6 @@ function scrambleString(str) {
 function scrambler() {
     scrambleText = scrambleString(pickedWord);
 
-    // Handling of whitespace
-    unspaced = pickedWord.replace(/\s/g, "");
-    spaced = scrambleText.replace(/\s/g, "[space]");
-
     // Ensure that the word is scrambled properly
     if (scrambleText === pickedWord) scrambler();
 }
@@ -50,14 +53,13 @@ function checkGuess() {
     if(!gameStarted) return;
 
     // Case-insensitive handling
-    if (guess.toLowerCase().replace(/\s/g, "") === unspaced) {
+    if (guess.toLowerCase() === pickedWord) {
         alert("Correct!");
         clearInterval(timer);
         location.reload();
     }
     else alert("Incorrect!");
 }
-
 
 // Convert number of seconds to HH:MM:SS
 formatTime(secondsLeft);
